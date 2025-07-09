@@ -1,0 +1,135 @@
+<app-navbar></app-navbar>
+
+<div
+  class="container py-5"
+  style="
+    background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+    min-height: 100vh;
+  "
+>
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <span class="display-6 text-primary"
+              ><i class="bi bi-search"></i
+            ></span>
+            <h2 class="fw-bold mt-2">Search Person</h2>
+            <div class="text-muted">
+              Find a person by ID, Name, or Blood Group
+            </div>
+          </div>
+          <form (ngSubmit)="search()" class="mb-4">
+            <div class="row g-3 align-items-end justify-content-center">
+              <div class="col-md-4">
+                <label for="searchType" class="form-label">Search By</label>
+                <select
+                  id="searchType"
+                  class="form-select"
+                  [(ngModel)]="searchType"
+                  name="searchType"
+                >
+                  <option value="id">ID</option>
+                  <option value="name">Name</option>
+                  <option value="bloodGroup">Blood Group</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="searchValue" class="form-label">Value</label>
+                <ng-container [ngSwitch]="searchType">
+                  <input
+                    *ngSwitchCase="'id'"
+                    id="searchValue"
+                    class="form-control"
+                    [(ngModel)]="searchValue"
+                    name="searchValue"
+                    required
+                    placeholder="Enter Person ID"
+                    type="number"
+                    min="1"
+                  />
+                  <input
+                    *ngSwitchCase="'name'"
+                    id="searchValue"
+                    class="form-control"
+                    [(ngModel)]="searchValue"
+                    name="searchValue"
+                    required
+                    placeholder="Enter Name"
+                  />
+                  <select
+                    *ngSwitchCase="'bloodGroup'"
+                    id="searchValue"
+                    class="form-select"
+                    [(ngModel)]="searchValue"
+                    name="searchValue"
+                    required
+                  >
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </select>
+                </ng-container>
+              </div>
+              <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                  <i class="bi bi-search me-1"></i>Search
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <div *ngIf="loading" class="text-center my-4">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+          <table
+            *ngIf="!loading && persons.length > 0"
+            class="table table-bordered table-striped"
+          >
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Blood Group</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of persons">
+                <td>{{ p.personId }}</td>
+                <td>{{ p.name }}</td>
+                <td>{{ p.bloodGroup }}</td>
+                <td>{{ p.gender }}</td>
+                <td>{{ p.address }}</td>
+                <td>+{{ p.countryCode }} {{ p.phoneNumber }}</td>
+                <td>{{ p.email }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div
+            *ngIf="!loading && persons.length === 0 && !error"
+            class="alert alert-info"
+          >
+            No persons found.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

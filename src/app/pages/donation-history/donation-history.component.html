@@ -1,0 +1,50 @@
+<app-toast-notification
+  [show]="showToast"
+  [message]="toastMessage"
+  [type]="toastType"
+></app-toast-notification>
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h3 class="text-center mb-4">Donation History</h3>
+
+  <div *ngIf="loading" class="text-center my-4">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <table
+    *ngIf="!loading && donations.length > 0"
+    class="table table-bordered table-striped"
+  >
+    <thead>
+      <tr>
+        <th>Person ID</th>
+        <th>Blood Group</th>
+        <th>Quantity</th>
+        <th>Donation Date & Time</th>
+        <th>RBC Count</th>
+        <th>WBC Count</th>
+        <th>Platelet Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of donations">
+        <td>{{ d.personId }}</td>
+        <td>{{ d.personBloodGroup }}</td>
+        <td>{{ d.quantity }}</td>
+        <td>{{ d.donationDateTime | date : "medium" }}</td>
+        <td>{{ d.rbcCount ?? "-" }}</td>
+        <td>{{ d.wbcCount ?? "-" }}</td>
+        <td>{{ d.plateletCount ?? "-" }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && donations.length === 0" class="alert alert-info">
+    No donation records found.
+  </div>
+</div>

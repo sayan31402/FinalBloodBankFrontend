@@ -1,0 +1,21 @@
+.invalid-feedback {
+  display: block;
+}
+
+.spinner-border {
+  width: 1rem;
+  height: 1rem;
+}
+
+.card {
+  border-radius: 1rem;
+}
+
+.btn-close {
+  opacity: 0.7;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.btn-close:hover {
+  opacity: 1;
+}

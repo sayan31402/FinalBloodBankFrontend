@@ -1,0 +1,56 @@
+.card {
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  transition: box-shadow 0.3s cubic-bezier(.4,2,.6,1);
+}
+.card:hover {
+  box-shadow: 0 16px 48px 0 rgba(31, 38, 135, 0.25);
+}
+
+.table {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+.table-striped tbody tr:hover {
+  background: #f3f6fb;
+  transition: background 0.2s;
+}
+
+.btn-primary {
+  border-radius: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px 0 rgba(13,110,253,.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover {
+  background: linear-gradient(90deg, var(--bs-primary), #4f8cff);
+  box-shadow: 0 4px 16px 0 rgba(13,110,253,.15);
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--bs-primary);
+}
+
+.display-6 i {
+  font-size: 2.2rem;
+  vertical-align: middle;
+}
+
+@media (max-width: 576px) {
+  .card {
+    padding: 0.5rem;
+  }
+  .card-body {
+    padding: 1.25rem 0.5rem;
+  }
+  .table {
+    font-size: 0.98rem;
+  }
+}
+
+.alert, .spinner-border {
+  border-radius: 0.75rem;
+}

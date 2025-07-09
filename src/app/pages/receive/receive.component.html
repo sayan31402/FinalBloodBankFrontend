@@ -1,0 +1,152 @@
+<app-navbar></app-navbar>
+
+<app-toast-notification [show]="showToast" [message]="toastMessage" [type]="toastType"></app-toast-notification>
+<div class="container mt-4">
+  <form
+    (ngSubmit)="recordReceive()"
+    #receiveForm="ngForm"
+    class="mx-auto"
+    style="max-width: 800px"
+  >
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-8">
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-4">
+            <div class="text-center mb-4">
+              <span class="display-6 text-danger"
+                ><i class="bi bi-droplet-half"></i
+              ></span>
+              <h2 class="fw-bold mt-2">Record a Receive</h2>
+              <div class="text-muted">
+                Fill in the details to record a new blood receive
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="personId" class="form-label">Person ID</label>
+              <div class="input-group">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="personId"
+                  required
+                  [(ngModel)]="receiver.personId"
+                  name="personId"
+                  #personIdInput="ngModel"
+                  min="1"
+                />
+                <button
+                  class="btn btn-outline-primary"
+                  type="button"
+                  (click)="fetchPersonById()"
+                >
+                  <i class="bi bi-search"></i> Fetch
+                </button>
+              </div>
+              <div *ngIf="loadingPerson" class="text-primary mt-2">
+                <div class="spinner-border spinner-border-sm"></div>
+                Loading...
+              </div>
+              <div *ngIf="personError" class="text-danger mt-2">
+                {{ personError }}
+              </div>
+              <div
+                *ngIf="
+                  personIdInput.invalid &&
+                  (personIdInput.dirty || personIdInput.touched)
+                "
+                class="invalid-feedback d-block"
+              >
+                <div *ngIf="personIdInput.errors?.['required']">
+                  Person ID is required.
+                </div>
+                <div *ngIf="personIdInput.errors?.['min']">
+                  Person ID must be greater than 0.
+                </div>
+              </div>
+              <div *ngIf="person" class="card mb-3 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title mb-2">
+                    <i class="bi bi-person-circle"></i> {{ person.name }}
+                  </h5>
+                  <div class="row">
+                    <div class="col-md-4 mb-2">
+                      <strong>Blood Group:</strong>
+                      <span class="badge bg-danger">{{
+                        person.bloodGroup
+                      }}</span>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                      <strong>Gender:</strong> {{ person.gender }}
+                    </div>
+                    <div class="col-md-4 mb-2">
+                      <strong>Address:</strong> {{ person.address }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4 mb-2">
+                      <i class="bi bi-telephone"></i> +{{
+                        person.countryCode || "91"
+                      }}
+                      {{ person.phoneNumber }}
+                    </div>
+                    <div class="col-md-4 mb-2">
+                      <i class="bi bi-envelope"></i> {{ person.email }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="receiverDateTime" class="form-label"
+                >Receive Date &amp; Time</label
+              >
+              <input
+                type="datetime-local"
+                class="form-control"
+                id="receiverDateTime"
+                required
+                [(ngModel)]="receiver.receiverDateTime"
+                name="receiverDateTime"
+                #receiverDateTimeInput="ngModel"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="quantity" class="form-label"
+                >Quantity (ml or bags)</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="quantity"
+                required
+                min="1"
+                [(ngModel)]="receiver.quantity"
+                name="quantity"
+                #quantityInput="ngModel"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="hospitalName" class="form-label">Hospital Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="hospitalName"
+                required
+                [(ngModel)]="receiver.hospitalName"
+                name="hospitalName"
+                #hospitalNameInput="ngModel"
+              />
+            </div>
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              [disabled]="receiveForm.invalid"
+            >
+              Record Receive
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

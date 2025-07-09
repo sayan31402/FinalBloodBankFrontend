@@ -1,0 +1,96 @@
+<!-- src/app/pages/home/home.component.html -->
+<app-navbar *ngIf="authService.isLoggedIn()"></app-navbar>
+<!-- Or use *ngIf="authService.isLoggedIn()" -->
+
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Welcome to the Blood Bank System</h2>
+
+  <div class="d-flex justify-content-center mb-3">
+    <button
+      class="btn btn-outline-primary mx-1"
+      [class.active]="selectedChart === 'pie'"
+      (click)="selectedChart = 'pie'"
+    >
+      Pie Chart
+    </button>
+
+    <button
+      *ngIf="userRole === 'Staff' || userRole === 'Admin'"
+      class="btn btn-outline-primary mx-1"
+      [class.active]="selectedChart === 'line'"
+      (click)="selectedChart = 'line'"
+    >
+      Donations Trend
+    </button>
+    <button
+      *ngIf="userRole === 'Staff' || userRole === 'Admin'"
+      class="btn btn-outline-primary mx-1"
+      [class.active]="selectedChart === 'doughnut'"
+      (click)="selectedChart = 'doughnut'"
+    >
+      Receives by Group
+    </button>
+  </div>
+
+  <div
+    *ngIf="selectedChart === 'pie'"
+    style="display: block; max-width: 500px; margin: 0 auto"
+  >
+    <canvas baseChart [data]="pieChartData" [type]="pieChartType"> </canvas>
+  </div>
+  <div
+    *ngIf="selectedChart === 'bar'"
+    style="display: block; max-width: 600px; margin: 0 auto"
+  >
+    <canvas baseChart [data]="barChartData" [type]="barChartType"> </canvas>
+  </div>
+  <div
+    *ngIf="
+      selectedChart === 'line' && (userRole === 'Staff' || userRole === 'Admin')
+    "
+    style="display: block; max-width: 700px; margin: 0 auto"
+  >
+    <canvas baseChart [data]="lineChartData" [type]="lineChartType"> </canvas>
+  </div>
+  <div
+    *ngIf="
+      selectedChart === 'doughnut' &&
+      (userRole === 'Staff' || userRole === 'Admin')
+    "
+    style="display: block; max-width: 500px; margin: 0 auto"
+  >
+    <canvas baseChart [data]="doughnutChartData" [type]="doughnutChartType">
+    </canvas>
+  </div>
+
+  <!-- Staff/Admin widgets -->
+  <div *ngIf="userRole === 'Staff' || userRole === 'Admin'" class="mt-5">
+    <h4 class="text-center">Staff Dashboard</h4>
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-body text-center">
+            <h5>Donation Stats</h5>
+            <p class="display-6">
+              {{ donationCount > 0 ? donationCount : "Loading..." }}
+            </p>
+            <small>Total Donations</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-body text-center">
+            <h5>Receive Stats</h5>
+            <p class="display-6">
+              {{ receiveCount > 0 ? receiveCount : "Loading..." }}
+            </p>
+            <small>Total Receives</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Add more staff/admin-only widgets here -->
+  </div>
+</div>
+<app-footer></app-footer>

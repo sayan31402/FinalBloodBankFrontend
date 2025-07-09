@@ -1,0 +1,73 @@
+body, :host {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+}
+
+.login-bg {
+  position: relative;
+  min-height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+.login-bg::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center center/cover no-repeat;
+  opacity: 0.32;
+  filter: blur(2px) grayscale(0.1);
+}
+
+/* Subtle geometric overlay */
+body::before, :host::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  background-image: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"><rect fill="none"/><g opacity="0.04"><polygon points="0,0 100,0 50,100" fill="%23006d77"/><polygon points="100,0 100,100 50,100" fill="%230083a1"/></g></svg>');
+  z-index: 1;
+}
+
+.login-card, .card {
+  position: relative;
+  z-index: 2;
+}
+
+.login-card, .card {
+  background: rgba(255, 255, 255, 0.70);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 1.5px 24px 0 rgba(0, 109, 119, 0.08);
+  margin: 3rem auto;
+  padding: 2.5rem 2rem;
+  max-width: 420px;
+  z-index: 1;
+  border: 1.5px solid rgba(0,109,119,0.13);
+  backdrop-filter: blur(14px) saturate(140%);
+  transition: box-shadow 0.25s, background 0.25s;
+}
+.login-card:hover {
+  box-shadow: 0 12px 40px rgba(0,109,119,0.18), 0 2px 32px 0 rgba(0, 131, 161, 0.13);
+  background: rgba(255,255,255,0.82);
+}
+
+.login-btn-animated {
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,109,119,0.08);
+}
+.login-btn-animated:hover:not(:disabled) {
+  background: linear-gradient(90deg, #006d77 0%, #00b4d8 100%);
+  color: #fff;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 24px rgba(0,109,119,0.16);
+}
+
+@media (max-width: 600px) {
+  .login-card, .card {
+    padding: 1.2rem 0.5rem;
+    max-width: 95vw;
+  }
+}

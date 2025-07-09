@@ -1,0 +1,70 @@
+<app-toast-notification [show]="showToast" [message]="toastMessage" [type]="toastType"></app-toast-notification>
+<app-navbar></app-navbar>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+      <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top">
+          <h2 class="mb-0 fw-bold"><i class="bi bi-person-plus me-2"></i>Add New User</h2>
+        </div>
+        <div class="card-body p-4 bg-light">
+          <form (ngSubmit)="addUser()" #userForm="ngForm" class="needs-validation" novalidate>
+            <!-- Username -->
+            <div class="form-floating mb-4 position-relative">
+              <input id="UserName" name="UserName" class="form-control fs-5" [(ngModel)]="user.UserName" required maxlength="100" placeholder="Username" autocomplete="off" />
+              <label for="UserName">Username</label>
+              <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="color: #0d6efd;" data-bs-toggle="tooltip" title="Enter a unique username.">
+                <i class="bi bi-person-circle fs-4"></i>
+              </span>
+              <div *ngIf="userForm.submitted && !user.UserName" class="invalid-feedback d-block fw-bold text-danger">Username is required.</div>
+            </div>
+            <!-- Password -->
+            <div class="form-floating mb-4 position-relative">
+              <input [type]="showPassword ? 'text' : 'password'" id="Password" name="Password" class="form-control fs-5" [(ngModel)]="user.Password" required minlength="6" maxlength="16" placeholder="Password" autocomplete="new-password" (input)="checkPasswordStrength()" />
+              <label for="Password">Password</label>
+              <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;color:#0d6efd;" (click)="togglePassword()" data-bs-toggle="tooltip" [attr.title]="showPassword ? 'Hide password' : 'Show password'">
+                <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+              </span>
+              <div *ngIf="userForm.submitted && (!user.Password || user.Password.length < 6 || user.Password.length > 16)" class="invalid-feedback d-block fw-bold text-danger">
+                Password must be 6-16 characters.
+              </div>
+              <!-- Password Strength Meter -->
+              <div *ngIf="user.Password" class="mt-2">
+                <div class="progress" style="height: 7px;">
+                  <div class="progress-bar" [ngClass]="{
+                    'bg-danger': passwordStrength === 'weak',
+                    'bg-warning': passwordStrength === 'medium',
+                    'bg-success': passwordStrength === 'strong'
+                  }" [style.width]="passwordStrengthPercent + '%'">
+                  </div>
+                </div>
+                <small [ngClass]="{
+                  'text-danger': passwordStrength === 'weak',
+                  'text-warning': passwordStrength === 'medium',
+                  'text-success': passwordStrength === 'strong'
+                }" class="fw-bold">
+                  Password strength: {{ passwordStrength | titlecase }}
+                </small>
+              </div>
+            </div>
+            <!-- Role -->
+            <div class="form-floating mb-4">
+              <select id="Role" name="Role" class="form-select fs-5" [(ngModel)]="user.Role" required>
+                <option value="ADMIN">ADMIN</option>
+                <option value="EMPLOYEE">EMPLOYEE</option>
+              </select>
+              <label for="Role">Role</label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2 fs-4 shadow-sm" [disabled]="loading || !userForm.form.valid">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              <i class="bi bi-person-plus me-2"></i>Add User
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

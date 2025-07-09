@@ -1,0 +1,222 @@
+<app-toast-notification
+  [show]="showToast"
+  [message]="toastMessage"
+  [type]="toastType"
+></app-toast-notification>
+
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <form
+    (ngSubmit)="recordDonation()"
+    #donationForm="ngForm"
+    class="mx-auto"
+    style="max-width: 800px"
+  >
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-8">
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-4">
+            <div class="text-center mb-4">
+              <span class="display-6 text-danger">
+                <i class="bi bi-droplet-half"></i>
+              </span>
+              <h2 class="fw-bold mt-2">Record a Donation</h2>
+              <div class="text-muted">
+                Fill in the details to record a new blood donation
+              </div>
+              <span class="display-6 text-danger">
+                <i class="bi bi-droplet-half"></i>
+              </span>
+            </div>
+
+            <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+              <i class="bi bi-check-circle-fill me-2"></i>{{ successMessage }}
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div class="row g-3 align-items-end justify-content-center">
+              <div class="col-md-8">
+                <div class="mb-3">
+                  <label for="personId" class="form-label">
+                    <i class="bi bi-person-badge me-1"></i>Person ID
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="personId"
+                      required
+                      [(ngModel)]="donation.personId"
+                      name="personId"
+                      #personIdInput="ngModel"
+                      min="1"
+                      [class.is-invalid]="
+                        personIdInput.invalid &&
+                        (personIdInput.dirty || personIdInput.touched)
+                      "
+                    />
+                    <button
+                      class="btn btn-outline-primary"
+                      type="button"
+                      (click)="fetchPersonById()"
+                    >
+                      <i class="bi bi-search"></i> Fetch
+                    </button>
+                  </div>
+                  <div *ngIf="loadingPerson" class="text-primary mt-2">
+                    <div class="spinner-border spinner-border-sm"></div>
+                    Loading...
+                  </div>
+                  <div *ngIf="personError" class="text-danger mt-2">
+                    {{ personError }}
+                  </div>
+                  <div *ngIf="person" class="card mb-3 shadow-sm">
+                    <div class="card-body">
+                      <h5 class="card-title mb-2">
+                        <i class="bi bi-person-circle"></i> {{ person.name }}
+                      </h5>
+                      <div class="row">
+                        <div class="col-md-4 mb-2">
+                          <strong>Blood Group:</strong>
+                          <span class="badge bg-danger">{{ person.bloodGroup }}</span>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                          <strong>Gender:</strong> {{ person.gender }}
+                        </div>
+                        <div class="col-md-4 mb-2">
+                          <strong>Address:</strong> {{ person.address }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4 mb-2">
+                          <strong>Phone:</strong> {{ person.phoneNumber }}
+                        </div>
+                        <div class="col-md-4 mb-2">
+                          <strong>Email:</strong> {{ person.email }}
+                        </div>
+                        <div class="col-md-4 mb-2">
+                          <strong>Created:</strong>
+                          {{ person.createdAt | date:'short' }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="
+                      personIdInput.invalid &&
+                      (personIdInput.dirty || personIdInput.touched)
+                    "
+                    class="invalid-feedback d-block"
+                  >
+                    <div *ngIf="personIdInput.errors?.['required']">
+                      Person ID is required.
+                    </div>
+                    <div *ngIf="personIdInput.errors?.['min']">
+                      Person ID must be greater than 0.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="donationDateTime" class="form-label">Donation Date & Time</label>
+                  <input
+                    type="datetime-local"
+                    class="form-control"
+                    id="donationDateTime"
+                    required
+                    [(ngModel)]="donation.donationDateTime"
+                    name="donationDateTime"
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label for="quantity" class="form-label">Quantity (ml)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="quantity"
+                    required
+                    min="1"
+                    [(ngModel)]="donation.quantity"
+                    name="quantity"
+                    #quantityInput="ngModel"
+                    [class.is-invalid]="
+                      quantityInput.invalid &&
+                      (quantityInput.dirty || quantityInput.touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      quantityInput.invalid &&
+                      (quantityInput.dirty || quantityInput.touched)
+                    "
+                    class="invalid-feedback d-block"
+                  >
+                    <div *ngIf="quantityInput.errors?.['required']">
+                      Quantity is required.
+                    </div>
+                    <div *ngIf="quantityInput.errors?.['min']">
+                      Quantity must be at least 1.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label for="rbcCount" class="form-label">RBC Count</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="rbcCount"
+                      [(ngModel)]="donation.rbcCount"
+                      name="rbcCount"
+                      min="0"
+                    />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="wbcCount" class="form-label">WBC Count</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="wbcCount"
+                      [(ngModel)]="donation.wbcCount"
+                      name="wbcCount"
+                      min="0"
+                    />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="plateletCount" class="form-label">Platelet Count</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="plateletCount"
+                      [(ngModel)]="donation.plateletCount"
+                      name="plateletCount"
+                      min="0"
+                    />
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn btn-secondary" (click)="router.navigate(['/home'])">
+                    Cancel
+                  </button>
+                  <button type="submit" class="btn btn-primary" [disabled]="loading">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                    Record Donation
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

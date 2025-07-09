@@ -1,0 +1,4 @@
+// Add this to your HomeComponent imports if not already present:
+// import { FooterComponent } from '../../shared/footer/footer.component';
+
+// Add FooterComponent to the imports array in @Component decorator if using standalone components.
